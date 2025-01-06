@@ -6,6 +6,7 @@ use axum::{
     Router,
 };
 
+use tower_http::services::ServeDir;
 use tracing::info;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
@@ -21,9 +22,21 @@ async fn main() -> anyhow::Result<()> {
 
     info!("initializing router...");
 
-    let router = Router::new().route("/", get(hello));
+
+
+    //let router = Router::new().route("/", get(hello));
+    let assets_path = std::env::current_dir().unwrap();
     let port = 8000_u16;
     let addr = std::net::SocketAddr::from(([0, 0, 0, 0], port));
+
+    let router = Router::new()
+    .route("/", get(hello))
+    .route("/another-page", get(another_page))
+    .nest_service(
+        "/assets",
+        ServeDir::new(format!("{}/assets", assets_path.to_str().unwrap())),
+    );
+
 
     info!("router initialized, now listening on port {}", port);
 
@@ -40,12 +53,22 @@ async fn hello() -> impl IntoResponse {
     HtmlTemplate(template)
 }
 
+
 #[derive(Template)]
 #[template(path = "hello.html")]
 struct HelloTemplate;
 
 /// A wrapper type that we'll use to encapsulate HTML parsed by askama into valid HTML for axum to serve.
 struct HtmlTemplate<T>(T);
+
+async fn another_page() -> impl IntoResponse {
+    let template = AnotherPageTemplate {};
+    HtmlTemplate(template)
+}
+
+#[derive(Template)]
+#[template(path = "another-page.html")]
+struct AnotherPageTemplate;
 
 /// Allows us to convert Askama HTML templates into valid HTML for axum to serve in the response.
 impl<T> IntoResponse for HtmlTemplate<T>
