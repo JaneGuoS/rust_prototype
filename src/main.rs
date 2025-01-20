@@ -6,6 +6,7 @@ use axum::routing::post;
 use axum::Router;
 use rust_prototype::handlers::hello::*;
 use rust_prototype::handlers::another_page::*;
+use rust_prototype::handlers::blog_list::*;
 use rust_prototype::handlers::todo::{AppState, add_todo};
 use tokio::sync::Mutex;
 use tower_http::services::ServeDir;
@@ -14,15 +15,6 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 use diesel::prelude::*;
 use dotenvy::dotenv;
-use std::env;
-
-pub fn establish_connection() -> SqliteConnection {
-    dotenv().ok();
-
-    let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
-    SqliteConnection::establish(&database_url)
-        .unwrap_or_else(|_| panic!("Error connecting to {}", database_url))
-}
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -57,6 +49,7 @@ async fn main() -> anyhow::Result<()> {
         .nest("/api", api_router)
         .route("/", get(hello))
         .route("/another-page", get(another_page))
+        .route("/blog_list", get(blog_list))
         .nest_service(
             "/assets",
             ServeDir::new(format!("{}/assets", assets_path.to_str().unwrap())),
