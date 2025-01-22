@@ -1,6 +1,7 @@
 pub mod handlers;
-pub mod models;
 pub mod schema;
+pub mod services;
+pub mod models;
 
 
 use diesel::prelude::*;
@@ -15,7 +16,7 @@ pub fn establish_connection() -> SqliteConnection {
         .unwrap_or_else(|_| panic!("Error connecting to {}", database_url))
 }
 
-use self::models::{NewPost, Post};
+use models::{NewPost, Post};
 
 pub fn create_post(conn: &mut SqliteConnection, title: &str, body: &str) -> Post {
     use crate::schema::posts;

@@ -13,8 +13,6 @@ use tower_http::services::ServeDir;
 use tracing::info;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
-use diesel::prelude::*;
-use dotenvy::dotenv;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {

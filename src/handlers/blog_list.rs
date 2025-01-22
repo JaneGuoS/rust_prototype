@@ -1,6 +1,10 @@
 use askama::Template;
 use axum::{ http::StatusCode, response::{Html, IntoResponse, Response} };
 
+use super::post_service::*;
+
+use super::Post;
+
 
 struct HtmlTemplate<T>(T);
 
@@ -10,11 +14,13 @@ struct HtmlTemplate<T>(T);
 #[template(path = "blog_list.html")]
 struct BlogListTemplate
 {
-    title: String
+    title: String,
+    posts: Vec<Post>
 }
 
 pub async fn blog_list() -> impl IntoResponse {
-    let template =  BlogListTemplate { title:  String::from("test")};
+    let posts = PostService::fetch();
+    let template =  BlogListTemplate { title:  String::from("test"), posts: posts};
     HtmlTemplate(template)
 }
 
