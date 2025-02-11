@@ -26,9 +26,9 @@ The customized app generator allows for effective management of businesses by or
    ```bash
      DATABASE_URL=/Users/j.guo/Repo/rust_prototype/test.db
    ```
-4. Run the server
+3. Run the server
    ```bash
      cargo run --bin rust_prototype
    ```
-6. Access the server http://localhost:8000/blog_list/
+4. Access the server http://localhost:8000/blog_list/
      
