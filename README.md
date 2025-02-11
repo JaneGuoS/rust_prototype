@@ -20,7 +20,7 @@ The customized app generator allows for effective management of businesses by or
 ## How to Run
 1. Clone this repo into the directory of your choice
    ```bash
-   git clone [https://github.com/JaneGuoS/customized_app_generator.git](https://github.com/JaneGuoS/rust_prototype.git)
+   git clone https://github.com/JaneGuoS/customized_app_generator.git
    ```
 2. Define the `.env`
    ```bash
